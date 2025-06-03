@@ -58,73 +58,22 @@ pipeline {
         }
       }
       steps {
-        script {
-          git url: 'https://github.com/Rintan28/casestudy-jenkins.git', branch: 'main'
-
-          withCredentials([file(credentialsId: "${KUBECONFIG_CRED}", variable: 'KUBECONFIG_FILE')]) {
+        withCredentials([file(credentialsId: "${KUBECONFIG_CRED}", variable: 'KUBE_FILE')]) {
+          script {
             echo "🚀 Deploying to Kubernetes via Helm..."
             sh '''
-                # Install kubectl
-                apk add --no-cache curl
-                curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-                chmod +x kubectl
-                mv kubectl /usr/local/bin/
-                    
-                 # Debug environment variables
-                echo "=== DEBUG INFO ==="
-                echo "KUBECONFIG_CRED = ${KUBECONFIG_CRED}"
-                echo "KUBECONFIG_FILE = $KUBECONFIG_FILE"
-                echo "PWD = $(pwd)"
-                echo "HOME = $HOME"
-                echo ""
-                    
-                # Check if kubeconfig file exists
-                if [ -z "$KUBECONFIG_FILE" ]; then
-                    echo "❌ ERROR: KUBECONFIG_FILE variable is empty"
-                    echo "Check if credential '${KUBECONFIG_CRED}' exists in Jenkins"
-                    exit 1
-                fi
-                    
-                if [ ! -f "$KUBECONFIG_FILE" ]; then
-                    echo "❌ ERROR: Kubeconfig file not found at: $KUBECONFIG_FILE"
-                    ls -la $(dirname "$KUBECONFIG_FILE") || echo "Directory not found"
-                    exit 1
-                fi
-                    
-                echo "✅ Kubeconfig file found: $KUBECONFIG_FILE"
-                echo "File size: $(wc -c < "$KUBECONFIG_FILE") bytes"
-                    
-                # Setup kubeconfig
-                mkdir -p ~/.kube
-                cp "$KUBECONFIG_FILE" ~/.kube/config
-                chmod 600 ~/.kube/config
-                    
-                echo "🔍 Testing Kubernetes connection..."
-                kubectl cluster-info
-                kubectl get nodes
-                    
-                echo "📋 Helm chart validation..."
-                helm lint ./helm
-                    
-                echo "🚀 Deploying application..."
-                helm upgrade --install $HELM_RELEASE ./helm \
-                    --set image.repository=$IMAGE \
-                    --set image.tag=$TAG \
-                    --namespace $NAMESPACE \
-                    --create-namespace \
-                    --wait \
-                    --timeout=300s \
-                    --debug
-                    
-                echo "✅ Deployment completed!"
+              export KUBECONFIG=$KUBE_FILE
+              helm upgrade --install $HELM_RELEASE ./helm \
+                --set image.repository=$IMAGE \
+                --set image.tag=$TAG \
+                --namespace $NAMESPACE --create-namespace
             '''
           }
         }
       }
     }
   }
-
-
+  
   post {
     success {
       echo "✅ Pipeline Sukses: Aplikasi berhasil dideploy ke Kubernetes"
