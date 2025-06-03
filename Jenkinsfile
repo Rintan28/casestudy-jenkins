@@ -21,7 +21,7 @@ pipeline {
       steps {
         script {
           echo "🛠️ Building image ${IMAGE}:${TAG}..."
-           sh 'docker build -t eve56/demo-app:latest .'
+          def builtImage = docker.build("${IMAGE}:${TAG}")
         }
       }
     }
