@@ -16,13 +16,6 @@ pipeline {
         git url: 'https://github.com/Rintan28/casestudy-jenkins.git', branch: 'main'
       }
     }
-    
-    stage('Check Docker Context Size') {
-      steps {
-        sh 'du -sh .'
-        sh 'ls -lah'
-      }
-    }
 
     stage('Build Docker Image') {
       steps {
