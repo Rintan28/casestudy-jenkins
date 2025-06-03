@@ -1,4 +1,4 @@
 image:
-  repository: azeshion21/demo-app
+  repository: eve56/demo-app
   tag: latest
 replicaCount: 1
