@@ -51,20 +51,20 @@ pipeline {
       }
     }
 
-stage('Deploy to Kubernetes') {
-  agent {
-    docker {
-      image 'alpine/helm:latest'
-      args '-u root:root'
-    }
-  }
-  steps {
-    script {
-      git url: 'https://github.com/Rintan28/casestudy-jenkins.git', branch: 'main'
+    stage('Deploy to Kubernetes') {
+      agent {
+        docker {
+          image 'alpine/helm:latest'
+          args '-u root:root'
+        }
+      }
+      steps {
+        script {
+          git url: 'https://github.com/Rintan28/casestudy-jenkins.git', branch: 'main'
 
-      withCredentials([file(credentialsId: "${KUBECONFIG_CRED}", variable: 'KUBECONFIG_FILE')]) {
-        echo "🚀 Deploying to Kubernetes via Helm..."
-        sh '''
+          withCredentials([file(credentialsId: "${KUBECONFIG_CRED}", variable: 'KUBECONFIG_FILE')]) {
+            echo "🚀 Deploying to Kubernetes via Helm..."
+            sh '''
                 # Install kubectl
                 apk add --no-cache curl
                 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -118,11 +118,12 @@ stage('Deploy to Kubernetes') {
                     --debug
                     
                 echo "✅ Deployment completed!"
-        '''
+            '''
+          }
+        }
       }
     }
   }
-}
 
 
   post {
