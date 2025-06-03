@@ -68,6 +68,10 @@ pipeline {
                 --set image.repository=$IMAGE \
                 --set image.tag=$TAG \
                 --namespace $NAMESPACE --create-namespace
+                # Update kubeconfig
+                minikube update-context
+                # Verify connection
+                kubectl cluster-info
             '''
           }
         }
