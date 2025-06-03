@@ -52,6 +52,12 @@ pipeline {
     }
 
     stage('Deploy to Kubernetes (Helm)') {
+      agent {
+        docker {
+            image 'eve56/demo-app' // <-- pakai image buatan kamu yang sudah ada helm-nya
+        }
+      }
+      
       steps {
         withCredentials([file(credentialsId: "${KUBECONFIG_CRED}", variable: 'KUBE_FILE')]) {
           script {
