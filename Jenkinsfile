@@ -54,7 +54,7 @@ pipeline {
     stage('Deploy to Kubernetes (Helm)') {
       agent {
         docker {
-            image 'eve56/demo-app' // <-- pakai image buatan kamu yang sudah ada helm-nya
+            image 'eve56/demo-app'
         }
       }
       
@@ -63,15 +63,14 @@ pipeline {
           script {
             echo "🚀 Deploying to Kubernetes via Helm..."
             sh '''
-              export KUBECONFIG=~/.kube/config
+              mkdir -p ~/.kube
+              cp $KUBECONFIG_FILE ~/.kube/config
+              chmod 600 ~/.kube/config
+              kubectl cluster-info
               helm upgrade --install $HELM_RELEASE ./helm \
                 --set image.repository=$IMAGE \
                 --set image.tag=$TAG \
                 --namespace $NAMESPACE --create-namespace
-                # Update kubeconfig
-                minikube update-context
-                # Verify connection
-                kubectl cluster-info
             '''
           }
         }
