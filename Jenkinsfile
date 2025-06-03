@@ -59,11 +59,11 @@ pipeline {
       }
       
       steps {
-        withCredentials([file(credentialsId: "${KUBECONFIG_CRED}", variable: 'KUBE_FILE')]) {
+        withCredentials([file(credentialsId: "${KUBECONFIG_CRED}"]) {
           script {
             echo "🚀 Deploying to Kubernetes via Helm..."
             sh '''
-              export KUBECONFIG=$KUBE_FILE
+              export KUBECONFIG=~/.kube/config
               helm upgrade --install $HELM_RELEASE ./helm \
                 --set image.repository=$IMAGE \
                 --set image.tag=$TAG \
