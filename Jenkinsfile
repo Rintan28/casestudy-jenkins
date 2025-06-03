@@ -59,7 +59,7 @@ pipeline {
       }
       
       steps {
-        withCredentials([file(credentialsId: "${KUBECONFIG_CRED}")]) {
+        withCredentials([file(credentialsId: "${KUBECONFIG_CRED}", variable: 'KUBECONFIG')]) {
           script {
             echo "🚀 Deploying to Kubernetes via Helm..."
             sh '''
