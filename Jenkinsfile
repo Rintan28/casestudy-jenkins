@@ -21,7 +21,13 @@ pipeline {
       steps {
         script {
           echo "🛠️ Building image ${IMAGE}:${TAG}..."
-          def builtImage = docker.build("${IMAGE}:${TAG}")
+          // Cek isi workspace
+          sh 'pwd'
+          sh 'ls -la'
+
+          // Pastikan kita di direktori yang punya Dockerfile & .dockerignore
+          dir('.') {
+            def builtImage = docker.build("${IMAGE}:${TAG}", '.')
         }
       }
     }
