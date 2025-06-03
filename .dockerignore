@@ -1,8 +1,27 @@
-.git
-*.md
-*.log
+# Python artifacts
 __pycache__/
 *.pyc
-.idea
-venv
-jenkinsfile
+*.pyo
+*.pyd
+*.egg-info/
+
+# Git
+.git/
+.gitignore
+
+# Virtual environments
+venv/
+.env/
+
+# Logs
+*.log
+
+# Docker & Jenkins
+.dockerignore
+Dockerfile
+Jenkinsfile
+
+# Misc
+*.md
+*.txt
+tests/
