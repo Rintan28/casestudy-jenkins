@@ -54,8 +54,7 @@ pipeline {
     stage('Deploy to Kubernetes') {
       agent {
         docker {
-          image 'alpine/helm:latest'
-          args '-u root:root'
+          image 'eve56/demo-app:latest'
         }
       }
       steps {
