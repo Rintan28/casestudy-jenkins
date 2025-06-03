@@ -28,6 +28,7 @@ pipeline {
           // Pastikan kita di direktori yang punya Dockerfile & .dockerignore
           dir('.') {
             def builtImage = docker.build("${IMAGE}:${TAG}", '.')
+          }
         }
       }
     }
