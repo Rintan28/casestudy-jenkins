@@ -134,3 +134,4 @@ stage('Deploy to Kubernetes') {
     }
   }
 }
+}
