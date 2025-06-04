@@ -21,14 +21,7 @@ pipeline {
       steps {
         script {
           echo "🛠️ Building image ${IMAGE}:${TAG}..."
-          // Cek isi workspace
-          sh 'pwd'
-          sh 'ls -la'
-
-          // Pastikan kita di direktori yang punya Dockerfile & .dockerignore
-          dir('.') {
-            def builtImage = docker.build("${IMAGE}:${TAG}", '.')
-          }
+          def builtImage = docker.build("${IMAGE}:${TAG}")
         }
       }
     }
@@ -42,10 +35,10 @@ pipeline {
         )]) {
           script {
             echo "📦 Pushing image to DockerHub..."
-            sh """
+            sh '''
               echo "$PASS" | docker login -u "$USER" --password-stdin
               docker push ${IMAGE}:${TAG}
-            """
+            '''
           }
         }
       }
@@ -68,7 +61,7 @@ pipeline {
       }
     }
   }
-  
+
   post {
     success {
       echo "✅ Pipeline Sukses: Aplikasi berhasil dideploy ke Kubernetes"
