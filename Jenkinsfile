@@ -52,11 +52,6 @@ pipeline {
     }
 
     stage('Deploy to Kubernetes') {
-      agent {
-        docker {
-          image 'eve56/demo-app:latest'
-        }
-      }
       steps {
         withCredentials([file(credentialsId: "${KUBECONFIG_CRED}", variable: 'KUBE_FILE')]) {
           script {
