@@ -62,6 +62,8 @@ pipeline {
           script {
             echo "🚀 Deploying to Kubernetes via Helm..."
             sh """
+              echo "🔓 Unzipping kubeconfig..."
+              unzip -o $KUBE_FILE -d kubeconfig
               export KUBECONFIG=$KUBE_FILE
               helm upgrade --install $HELM_RELEASE ./helm \
                 --set image.repository=$IMAGE \
