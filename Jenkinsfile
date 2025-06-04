@@ -64,7 +64,7 @@ pipeline {
             sh """
               echo "🔓 Unzipping kubeconfig..."
               unzip -o $KUBE_FILE -d kubeconfig
-              export KUBECONFIG=$KUBE_FILE
+              export KUBECONFIG=kubeconfig/config
               helm upgrade --install $HELM_RELEASE ./helm \
                 --set image.repository=$IMAGE \
                 --set image.tag=$TAG \
